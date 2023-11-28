@@ -45,7 +45,7 @@ let clients = [];
 io.on("connection", (socket) => {
   let query = socket.handshake.query;
   let username = query.username;
-  let room = query.room;
+  let room = query.roomId;
   console.log(username + "连接了");
   if (clients.some((v) => v.userId === socket.id)) return;
   socket.join(room);
@@ -65,28 +65,28 @@ io.on("connection", (socket) => {
   socket.broadcast.to(room).emit("join", { username });
   io.sockets.in(room).emit("clients", clients);
   //收到对等连接创建的消息
-  socket.on("pc message", (data) => {
-    socket.to(data.to.userId).emit("pc message", data);
-    console.log("pc message收到对等创建的消息");
+  socket.on("pc_message", (data) => {
+    socket.to(data.to.userId).emit("pc_message", data);
+    console.log("pc_message收到对等创建的消息");
   });
   //发私信，发起视频互动的请求
   socket.on("interact", (data) => {
-    socket.to(data.from.userId).emit("interact", data);
-    console.log("interact发起视频互动的请求");
+    socket.to(data.to.userId).emit("interact", data);
+    console.log("发起视频互动的请求",data);
   });
   //对方同意视频互动
-  socket.on("agree interact", (data) => {
-    socket.to(data.from.userId).emit("agree interact", data);
-    console.log("agree interact对方同意视频互动");
+  socket.on("agree_interact", (data) => {
+    socket.to(data.from.userId).emit("agree_interact", data);
+    console.log("对方同意视频互动",data);
   });
   // 对方拒绝视频互动
-  socket.on("refuse interact", (data) => {
-    socket.to(data.from.userId).emit("refuse interact", data);
+  socket.on("refuse_interact", (data) => {
+    socket.to(data.from.userId).emit("refuse_interact", data);
     console.log("拒绝视频互动的请求");
   });
   // 对方停止视频互动
-  socket.on("stop interact", (data) => {
-    socket.to(data.to.userId).emit("stop interact", data);
+  socket.on("stop_interact", (data) => {
+    socket.to(data.to.userId).emit("stop_interact", data);
     console.log("停止视频互动");
   });
   //离开房间
