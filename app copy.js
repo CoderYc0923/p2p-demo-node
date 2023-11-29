@@ -1,45 +1,11 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const http = require("http");
-const serveIndex = require("serve-index");
+"use strict";
+import { SOCKET_EMIT, SOCKET_ON_RTC, SOCKET_ON_SYS } from './src/utils'
+import {initServer} from './src/init'
+import  from './src/clients'
 
-const app = express();
-
-//设置跨域
-app.all("*", function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  //  res.header("Access-Control-Max-Age", "3600");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,X_Requested_With,Content-Type"
-  );
-  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
-  //res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
-
-app.use(bodyParser.json({ limit: "2048kb" }));
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(express.static(__dirname + "/public"));
-
-var http_server = http.createServer(app);
-
-http_server.listen(3007);
-
-const onListening = () => {
-  var addr = http_server.address();
-  var bind = typeof addr === "string" ? `pipe${addr}` : `port${addr.port}`;
-  console.log("服务启动:", bind);
-};
-
-http_server.on("listening", onListening);
-
-var io = require("socket.io")(http_server, {
-  path: "/rtcket",
-  cors: true,
-});
+//初始化服务
+let io = initServer();
+let clients = new ClientsController();
 
 let clients = [];
 io.on("connection", (socket) => {

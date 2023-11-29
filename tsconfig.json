@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "CommonJS",
+    "skipLibCheck": true,
+    "rootDir": "./src",
+    "outDir": "dist",
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "downlevelIteration": true,
+    "strictPropertyInitialization": false,
+    "strict": true,
+    "lib": [
+      "es5",
+      "es6"
+    ],
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
