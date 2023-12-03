@@ -27,7 +27,7 @@ export default function initServer() {
   http_server.listen(3007);
 
   let io = new IO(http_server, {
-    path: "/rtc",
+    path: "/rtcket",
     cors: {
       origin: "*",
     },
